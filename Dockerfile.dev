@@ -1,0 +1,10 @@
+FROM python:3.9.18
+
+RUN useradd -ms /bin/bash python
+
+USER python
+WORKDIR /home/python/app
+
+RUN python -m pip install psycopg2 matplotlib
+
+CMD ["sh", "-c", "tail -f /dev/null"]

@@ -1,0 +1,6 @@
+FROM postgres:16-alpine
+
+COPY ./.docker/initdb.sql /docker-entrypoint-initdb.d/initdb.sql
+RUN chmod +x /docker-entrypoint-initdb.d/initdb.sql
+
+CMD ["docker-entrypoint.sh", "postgres"]

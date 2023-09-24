@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  app:
+    profiles:
+      - "dev"
+    build: 
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/home/python/app
+    networks:
+      app-networks:
+
+  db:
+    profiles:
+      - "dev"
+    build: 
+      dockerfile: Dockerfile.db.dev
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    networks:
+      app-networks:
+
+networks:
+  app-networks:
