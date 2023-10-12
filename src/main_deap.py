@@ -1,7 +1,7 @@
 import psycopg2;
 
 from adapter import ExportReportPDF, ProductRepository
-from domain import GeneticAlgorithm
+from domain import GenericAlgorithmDeap
 
 if __name__ == "__main__":
     connection = psycopg2.connect(
@@ -15,14 +15,14 @@ if __name__ == "__main__":
     names, spaces, values  = product_repository.values()
     connection.close()
 
-    runner = GeneticAlgorithm(population_size=len(names))
-    chromosome = runner.run(mutation_probability=0.01, number_of_generations=10000, spaces=spaces, values=values, space_limit=3)
+    runner = GenericAlgorithmDeap(values=values, spaces=spaces, space_limit=9)
+    result, info = runner.run(number_of_generations = 100, population_size = len(spaces))
 
     total = 0
     for i in range(len(spaces)):
-        if chromosome[i] == '1':
+        if result[i] == 1:
             total += values[i]
             print('Nome: %s R$ %s' % (names[i], values[i]))
 
     print("Melhor solução %s" % total)
-    ExportReportPDF().export(runner.solutions)
+    ExportReportPDF().export(info.select("max"))
